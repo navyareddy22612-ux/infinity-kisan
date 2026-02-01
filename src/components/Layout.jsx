@@ -2,17 +2,15 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import BottomNav from './BottomNav';
 
-const Layout = ({ children }) => {
-    const [lang, setLang] = useState('en');
+import { useLanguage } from '../context/LanguageContext';
 
-    const toggleLang = () => {
-        setLang(prev => prev === 'en' ? 'hi' : 'en');
-    };
+const Layout = ({ children }) => {
+    const { language } = useLanguage();
 
     return (
-        <div className="layout">
+        <div className="layout" dir={language === 'ur' ? 'rtl' : 'ltr'}>
             {/* Navbar for Desktop/Tablet */}
-            <Navbar lang={lang} toggleLang={toggleLang} />
+            <Navbar />
 
             {/* Main Content Area */}
             <main style={{ minHeight: '100vh', paddingBottom: '80px' }}>

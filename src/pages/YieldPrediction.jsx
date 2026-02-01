@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recha
 import { ChevronDown, Calculator, DollarSign, Sprout } from 'lucide-react';
 import BackButton from '../components/BackButton';
 import styles from '../styles/YieldPrediction.module.css';
+import { useTranslation } from '../services/i18n';
 
 // Enhanced Mock Data for 15+ Crops
 // Costs are per Acre in INR
@@ -26,6 +27,7 @@ const CROP_DB = {
 };
 
 const YieldPrediction = () => {
+    const { t } = useTranslation();
     const [crop, setCrop] = useState('');
     const [area, setArea] = useState('');
     const [unit, setUnit] = useState('acre'); // 'acre' or 'hectare'
@@ -46,7 +48,6 @@ const YieldPrediction = () => {
         const profit = revenue - totalCost;
 
         // Detailed Breakdown logic (percentages of total cost)
-        // Different profiles could be used, but using a standard model for now
         const breakdownData = [
             { name: 'Seeds', value: Math.round(totalCost * 0.12), color: '#0088FE' },
             { name: 'Fertilizers', value: Math.round(totalCost * 0.20), color: '#00C49F' },
@@ -69,13 +70,13 @@ const YieldPrediction = () => {
     return (
         <div className="container">
             <BackButton />
-            <h2 className="text-center" style={{ margin: '1.5rem 0' }}>Yield & Profit Calculator</h2>
+            <h2 className="text-center" style={{ margin: '1.5rem 0' }}>{t('yield_calculator')}</h2>
 
             <div className={styles.predictionContainer}>
                 <div className="card">
                     <form onSubmit={calculate} className={styles.form}>
                         <div className={styles.inputGroup}>
-                            <label>Select Crop (15+ Options)</label>
+                            <label>{t('select_crop_15')}</label>
                             <div className={styles.selectWrapper}>
                                 {!crop && <Sprout size={18} className={styles.inputIcon} />}
                                 <select
@@ -84,7 +85,7 @@ const YieldPrediction = () => {
                                     required
                                     style={{ paddingLeft: crop ? '12px' : '40px' }}
                                 >
-                                    <option value="">-- Choose Crop --</option>
+                                    <option value="">{t('choose_crop')}</option>
                                     {Object.entries(CROP_DB).map(([key, data]) => (
                                         <option key={key} value={key}>{data.name}</option>
                                     ))}
@@ -95,20 +96,20 @@ const YieldPrediction = () => {
 
                         <div className={styles.inputRow}>
                             <div className={styles.inputGroup} style={{ flex: 1 }}>
-                                <label>Area Size</label>
+                                <label>{t('area_size')}</label>
                                 <input type="number" value={area} onChange={e => setArea(e.target.value)} placeholder="e.g. 5" step="0.1" required />
                             </div>
                             <div className={styles.inputGroup} style={{ width: '120px' }}>
-                                <label>Unit</label>
+                                <label>{t('unit')}</label>
                                 <select value={unit} onChange={e => setUnit(e.target.value)}>
-                                    <option value="acre">Acres</option>
-                                    <option value="hectare">Hectares</option>
+                                    <option value="acre">{t('acres')}</option>
+                                    <option value="hectare">{t('hectares')}</option>
                                 </select>
                             </div>
                         </div>
 
                         <button type="submit" className="btn btn-primary w-full">
-                            <Calculator size={18} style={{ marginRight: '8px' }} /> Calculate Profit
+                            <Calculator size={18} style={{ marginRight: '8px' }} /> {t('calculate_profit')}
                         </button>
                     </form>
                 </div>
@@ -117,29 +118,29 @@ const YieldPrediction = () => {
                     <div className={styles.results}>
                         <div className={styles.summaryGrid}>
                             <div className={`${styles.summaryCard} ${styles.highlight}`}>
-                                <label>Net Profit</label>
+                                <label>{t('net_profit')}</label>
                                 <div className={styles.value}>₹{result.profit.toLocaleString()}</div>
-                                <div className={styles.subtext}>Estimated Return</div>
+                                <div className={styles.subtext}>{t('estimated_return')}</div>
                             </div>
                             <div className={styles.summaryCard}>
-                                <label>Total Yield</label>
+                                <label>{t('total_yield_label')}</label>
                                 <div className={styles.value}>{Math.round(result.yield).toLocaleString()} Q</div>
-                                <div className={styles.subtext}>Quintals</div>
+                                <div className={styles.subtext}>{t('quintals')}</div>
                             </div>
                             <div className={`${styles.summaryCard} ${styles.expense}`}>
-                                <label>Total Cost</label>
+                                <label>{t('total_cost_label')}</label>
                                 <div className={styles.value}>₹{result.cost.toLocaleString()}</div>
-                                <div className={styles.subtext}>Input Expenses</div>
+                                <div className={styles.subtext}>{t('input_expenses')}</div>
                             </div>
                             <div className={`${styles.summaryCard} ${styles.revenue}`}>
-                                <label>Gross Revenue</label>
+                                <label>{t('gross_revenue')}</label>
                                 <div className={styles.value}>₹{result.revenue.toLocaleString()}</div>
-                                <div className={styles.subtext}>Sales Value</div>
+                                <div className={styles.subtext}>{t('sales_value')}</div>
                             </div>
                         </div>
 
                         <div className={styles.breakdownSection}>
-                            <h4 className="text-center" style={{ marginBottom: '1rem' }}>Expense Breakdown</h4>
+                            <h4 className="text-center" style={{ marginBottom: '1rem' }}>{t('expense_breakdown')}</h4>
 
                             <div className={styles.breakdownGrid}>
                                 <div className={styles.chartWrapper}>
@@ -168,8 +169,8 @@ const YieldPrediction = () => {
                                     <table className={styles.costTable}>
                                         <thead>
                                             <tr>
-                                                <th>Category</th>
-                                                <th className="text-right">Estimated Cost (₹)</th>
+                                                <th>{t('category')}</th>
+                                                <th className="text-right">{t('estimated_cost_inr')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -183,7 +184,7 @@ const YieldPrediction = () => {
                                                 </tr>
                                             ))}
                                             <tr className={styles.totalRow}>
-                                                <td><strong>Total</strong></td>
+                                                <td><strong>{t('total')}</strong></td>
                                                 <td className="text-right"><strong>{result.cost.toLocaleString()}</strong></td>
                                             </tr>
                                         </tbody>

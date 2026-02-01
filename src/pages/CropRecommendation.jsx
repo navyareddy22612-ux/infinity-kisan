@@ -3,6 +3,7 @@ import { Sprout, Droplets, Clock, MapPin, Search, Map } from 'lucide-react';
 import MapPicker from '../components/MapPicker';
 import BackButton from '../components/BackButton';
 import styles from '../styles/CropRecommendation.module.css';
+import { useTranslation } from '../services/i18n';
 
 // Mock Database for Indian States
 const SOIL_DATA = {
@@ -45,6 +46,7 @@ const SOIL_DATA = {
 };
 
 const CropRecommendation = () => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
@@ -187,20 +189,20 @@ const CropRecommendation = () => {
     return (
         <div className="container">
             <BackButton />
-            <h2 className="text-center" style={{ margin: '1.5rem 0' }}>Crop Recommendation</h2>
+            <h2 className="text-center" style={{ margin: '1.5rem 0' }}>{t('crop_recommendation')}</h2>
 
             {!result ? (
                 <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
                     <form onSubmit={handleSubmit} className={styles.form}>
 
                         <div className={styles.stateSelect}>
-                            <label>Search Location</label>
+                            <label>{t('search_location')}</label>
                             <div className="flex gap-2">
                                 <div className={styles.selectWrapper} style={{ flex: 1 }}>
                                     <Search size={18} className={styles.inputIcon} />
                                     <input
                                         type="text"
-                                        placeholder="Enter city, district or state..."
+                                        placeholder={t('location_placeholder')}
                                         value={searchText}
                                         onChange={(e) => setSearchText(e.target.value)}
                                         onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearch())}
@@ -212,60 +214,60 @@ const CropRecommendation = () => {
                                 </div>
 
                                 <button type="button" className={`btn btn-outline ${styles.mapBtn}`} onClick={() => setShowMap(true)}>
-                                    <Map size={20} /> Map
+                                    <Map size={20} /> {t('use_map')}
                                 </button>
                             </div>
 
                             {detectedLocation && (
                                 <div className={styles.autoHint}>
-                                    <MapPin size={12} /> Location: <b>{detectedLocation}</b> (Soil Data Auto-filled)
+                                    <MapPin size={12} /> {t('detected_location')}: <b>{detectedLocation}</b> ({t('soil_autofill_hint')})
                                 </div>
                             )}
                         </div>
 
-                        <div className={styles.divider}><span>OR EDIT SOIL DATA</span></div>
+                        <div className={styles.divider}><span>{t('or_edit_soil')}</span></div>
 
                         <div className={styles.inputGrid}>
                             <div className={styles.inputGroup}>
-                                <label>Nitrogen (N)</label>
+                                <label>{t('nitrogen')}</label>
                                 <input type="number" name="N" value={inputs.N} onChange={handleInputChange} placeholder="0-200" required />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Phosphorus (P)</label>
+                                <label>{t('phosphorus')}</label>
                                 <input type="number" name="P" value={inputs.P} onChange={handleInputChange} placeholder="0-100" required />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Potassium (K)</label>
+                                <label>{t('potassium')}</label>
                                 <input type="number" name="K" value={inputs.K} onChange={handleInputChange} placeholder="0-100" required />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>pH Level</label>
+                                <label>{t('ph_level')}</label>
                                 <input type="number" name="ph" value={inputs.ph} onChange={handleInputChange} step="0.1" placeholder="0-14" required />
                             </div>
                         </div>
 
                         <button disabled={loading} className={`btn btn-primary ${styles.submitBtn}`}>
-                            {loading ? 'Analyzing Soil...' : 'Get Best Crops'}
+                            {loading ? t('analyzing_soil') : t('get_best_crops')}
                         </button>
                     </form>
                 </div>
             ) : (
                 <div className={styles.results}>
                     <div className={styles.topResult}>
-                        <div className={styles.badge}>Best Match for {detectedLocation || "You"}</div>
+                        <div className={styles.badge}>{t('best_match_for')} {detectedLocation || "You"}</div>
                         <h3>{result[0].name}</h3>
                         <div className={styles.scoreChart}>
                             <span>{result[0].score}%</span>
-                            <small>Suitability</small>
+                            <small>{t('suitability')}</small>
                         </div>
                         <div className={styles.meta}>
                             <span><Clock size={16} /> {result[0].duration}</span>
                             <span><Droplets size={16} /> {result[0].water}</span>
                         </div>
-                        <button className="btn btn-outline w-full" onClick={() => setResult(null)}>Check Another</button>
+                        <button className="btn btn-outline w-full" onClick={() => setResult(null)}>{t('check_another')}</button>
                     </div>
 
-                    <h4 style={{ marginTop: '1.5rem', textAlign: 'center' }}>Alternative Crops</h4>
+                    <h4 style={{ marginTop: '1.5rem', textAlign: 'center' }}>{t('alternative_crops')}</h4>
                     <div className={styles.otherList}>
                         {result.slice(1).map((crop, i) => (
                             <div key={i} className={styles.otherCard}>

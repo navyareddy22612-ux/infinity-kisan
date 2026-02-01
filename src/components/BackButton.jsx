@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from '../services/i18n';
 
 const BackButton = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <button
@@ -22,7 +24,7 @@ const BackButton = () => {
                 cursor: 'pointer'
             }}
         >
-            <ArrowLeft size={20} /> Back to Dashboard
+            <ArrowLeft size={20} /> {t('back_to_dashboard')}
         </button>
     );
 };

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import styles from '../styles/MapPicker.module.css';
+import { useTranslation } from '../services/i18n';
 
 // Fix for default marker icon in Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -33,6 +34,7 @@ const LocationMarker = ({ setPos }) => {
 };
 
 const MapPicker = ({ onLocationSelect, onClose }) => {
+    const { t } = useTranslation();
     const [selectedPos, setSelectedPos] = useState(null);
 
     const handleConfirm = () => {
@@ -40,7 +42,7 @@ const MapPicker = ({ onLocationSelect, onClose }) => {
             onLocationSelect(selectedPos);
             onClose();
         } else {
-            alert("Please tap on the map to select a location.");
+            alert(t('tap_on_map_alert'));
         }
     };
 
@@ -48,7 +50,7 @@ const MapPicker = ({ onLocationSelect, onClose }) => {
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
                 <div className={styles.header}>
-                    <h3>Pick a Location</h3>
+                    <h3>{t('pick_location_title')}</h3>
                     <button onClick={onClose} className={styles.closeBtn}>&times;</button>
                 </div>
 
@@ -64,10 +66,10 @@ const MapPicker = ({ onLocationSelect, onClose }) => {
 
                 <div className={styles.footer}>
                     <p className={styles.hint}>
-                        {selectedPos ? `Selected: ${selectedPos.lat.toFixed(4)}, ${selectedPos.lng.toFixed(4)}` : "Tap anywhere on the map"}
+                        {selectedPos ? `${t('selected_pos_label')}: ${selectedPos.lat.toFixed(4)}, ${selectedPos.lng.toFixed(4)}` : t('tap_map_hint')}
                     </p>
                     <button className="btn btn-primary" onClick={handleConfirm} disabled={!selectedPos}>
-                        Confirm Location
+                        {t('confirm_location')}
                     </button>
                 </div>
             </div>
